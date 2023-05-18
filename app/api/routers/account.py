@@ -9,6 +9,11 @@ PREFIX = f"/{TAG}"
 router: APIRouter = APIRouter(prefix=PREFIX, tags=[TAG])
 
 
+def convert_amount(amount: float) -> int:
+    """Convert amount from float to int"""
+    return int(amount * 100)
+
+
 @router.post(
     "",
     status_code=status.HTTP_201_CREATED,
@@ -29,7 +34,7 @@ async def create_account(
 )
 async def top_up_account(
     account_id: int,
-    amount: float,
+    amount: int = Depends(convert_amount),
     session: AsyncSession = Depends(get_session),
 ) -> schemas.Account:
     if not (
@@ -44,7 +49,7 @@ async def top_up_account(
     return await crud.update_account(
         session=session,
         account_id=account_id,
-        new_amount=(db_account.amount + int(amount * 100)),
+        new_amount=(db_account.amount + amount),
     )
 
 
@@ -56,7 +61,7 @@ async def top_up_account(
 )
 async def write_off_account(
     account_id: int,
-    amount: float,
+    amount: int = Depends(convert_amount),
     session: AsyncSession = Depends(get_session),
 ) -> schemas.Account:
     if not (
@@ -68,7 +73,7 @@ async def write_off_account(
     ):
         raise HTTPException(status_code=404, detail="Not found")
 
-    if (new_amount := (db_account.amount - int(amount * 100))) < 0:
+    if (new_amount := (db_account.amount - amount)) < 0:
         raise HTTPException(status_code=409, detail="Insufficient funds")
 
     return await crud.update_account(
