@@ -18,12 +18,14 @@ black = "^23.3.0"
 mypy = "^1.2.0"
 pylint = "^2.17.4"
 pytest = "^7.3.1"
+flake8 = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pylint.messages_control]
-disable = [
-    "missing-docstring",
-]
+disable = ["missing-docstring"]
+
+[flake8]
+max-line-length = 120

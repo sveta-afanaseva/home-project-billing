@@ -11,6 +11,7 @@ format:
 lint:
 	@$(VENV) && ( \
 	pylint --rcfile=./pyproject.toml ./**/*.py && \
+	flake8 --config=./pyproject.toml ./**/*.py && \
 	black ./ --check && \
 	isort ./ --check-only \
 	)
