@@ -7,13 +7,6 @@ services:
       - POSTGRES_DB=billing
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=test
-      - POSTGRES_SCHEMA=public
-    volumes:
-      - postgres:/data/postgres
     ports:
       - "5432:5432"
     restart: unless-stopped
-
-
-volumes:
-    postgres:
