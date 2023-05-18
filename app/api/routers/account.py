@@ -1,17 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.sql_app import crud, schemas
-from app.sql_app.database import get_session
+from app.api.dependencies import convert_amount, get_account_repository
+from app.sql_app import schemas
+from app.sql_app.crud import AccountRepository
 
 TAG = "accounts"
 PREFIX = f"/{TAG}"
 router: APIRouter = APIRouter(prefix=PREFIX, tags=[TAG])
-
-
-def convert_amount(amount: float) -> int:
-    """Convert amount from float to int"""
-    return int(amount * 100)
 
 
 @router.post(
@@ -21,9 +16,9 @@ def convert_amount(amount: float) -> int:
     response_model=schemas.Account,
 )
 async def create_account(
-    session: AsyncSession = Depends(get_session),
+    repository: AccountRepository = Depends(get_account_repository),
 ) -> schemas.Account:
-    return await crud.create_account(session=session)
+    return await repository.create_account()
 
 
 @router.put(
@@ -35,19 +30,17 @@ async def create_account(
 async def top_up_account(
     account_id: int,
     amount: int = Depends(convert_amount),
-    session: AsyncSession = Depends(get_session),
+    repository: AccountRepository = Depends(get_account_repository),
 ) -> schemas.Account:
     if not (
-        db_account := await crud.get_account(
-            session=session,
+        db_account := await repository.get_account(
             account_id=account_id,
             for_update=True,
         )
     ):
         raise HTTPException(status_code=404, detail="Not found")
 
-    return await crud.update_account(
-        session=session,
+    return await repository.update_account(
         account_id=account_id,
         new_amount=(db_account.amount + amount),
     )
@@ -62,11 +55,10 @@ async def top_up_account(
 async def write_off_account(
     account_id: int,
     amount: int = Depends(convert_amount),
-    session: AsyncSession = Depends(get_session),
+    repository: AccountRepository = Depends(get_account_repository),
 ) -> schemas.Account:
     if not (
-        db_account := await crud.get_account(
-            session=session,
+        db_account := await repository.get_account(
             account_id=account_id,
             for_update=True,
         )
@@ -76,8 +68,7 @@ async def write_off_account(
     if (new_amount := (db_account.amount - amount)) < 0:
         raise HTTPException(status_code=409, detail="Insufficient funds")
 
-    return await crud.update_account(
-        session=session,
+    return await repository.update_account(
         account_id=account_id,
         new_amount=new_amount,
     )
