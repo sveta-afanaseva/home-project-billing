@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from app.api.routers import account
-from app.sql_app.database import init_models
+from app.db.database import init_models
 
 
 def create_app() -> FastAPI:

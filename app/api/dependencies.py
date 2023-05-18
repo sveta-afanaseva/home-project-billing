@@ -1,8 +1,8 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.sql_app.crud import AccountRepository
-from app.sql_app.database import get_session
+from app.db.crud import AccountRepository
+from app.db.database import get_session
 
 
 async def convert_amount(amount: float) -> int:

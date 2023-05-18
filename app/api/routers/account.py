@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.api.dependencies import convert_amount, get_account_repository
-from app.sql_app import schemas
-from app.sql_app.crud import AccountRepository
+from app import schemas
+from app.db.crud import AccountRepository
 
 TAG = "accounts"
 PREFIX = f"/{TAG}"

@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.expression import insert, select, update
 
-from app.sql_app.models import Account
+from app.db.models import Account
 
 
 class AccountRepository:
