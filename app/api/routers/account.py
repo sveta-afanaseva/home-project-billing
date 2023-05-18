@@ -35,7 +35,7 @@ async def top_up_account(
     if not (
         db_account := await repository.get_account(
             account_id=account_id,
-            for_update=True,
+            lock=True,
         )
     ):
         raise HTTPException(status_code=404, detail="Not found")
@@ -60,7 +60,7 @@ async def write_off_account(
     if not (
         db_account := await repository.get_account(
             account_id=account_id,
-            for_update=True,
+            lock=True,
         )
     ):
         raise HTTPException(status_code=404, detail="Not found")

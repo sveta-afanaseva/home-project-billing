@@ -11,10 +11,10 @@ class AccountRepository:
     async def get_account(
         self,
         account_id: int,
-        for_update: bool = False,
+        lock: bool = False,
     ) -> Account | None:
         query = select(Account).where(Account.id == account_id)
-        if for_update:
+        if lock:
             query = query.with_for_update()
         cursor = await self.session.execute(query)
         account = cursor.scalar()
