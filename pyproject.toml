@@ -12,6 +12,7 @@ pydantic = "^1.10.7"
 psycopg2-binary = "^2.9.6"
 asyncpg = "^0.27.0"
 SQLAlchemy = "^2.0.13"
+python-dotenv = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "^23.3.0"
@@ -26,6 +27,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pylint.messages_control]
 disable = ["missing-docstring"]
+extension-pkg-whitelist = "pydantic"
 
 [flake8]
 max-line-length = 120

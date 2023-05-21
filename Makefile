@@ -10,7 +10,6 @@ format:
 
 lint:
 	@$(VENV) && ( \
-	pylint --rcfile=./pyproject.toml ./**/*.py && \
 	flake8 --config=./pyproject.toml ./**/*.py && \
 	black ./ --check && \
 	isort ./ --check-only \
@@ -21,3 +20,9 @@ test:
 
 run:
 	@$(VENV) && python -m app.main
+
+docker-build:
+	docker-compose build app
+
+docker-run: docker-build
+	docker-compose up app

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.api.dependencies import convert_amount, get_account_repository
 from app import schemas
+from app.api.dependencies import convert_amount, get_account_repository
 from app.db.crud import AccountRepository
 
 TAG = "accounts"

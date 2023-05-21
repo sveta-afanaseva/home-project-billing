@@ -8,5 +8,15 @@ services:
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=test
     ports:
-      - "5432:5432"
+      - 5432:5432
     restart: unless-stopped
+
+  app:
+    build: .
+    environment:
+      - DB_URL=postgresql+asyncpg://test:test@postgres/billing
+      - APP_HOST=0.0.0.0
+    ports:
+        - 8000:8000
+    depends_on:
+      - postgres

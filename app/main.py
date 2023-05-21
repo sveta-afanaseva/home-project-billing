@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 from app.api.routers import account
 from app.db.database import init_models
+from app.settings import AppSettings
 
 
 def create_app() -> FastAPI:
@@ -17,4 +18,4 @@ def create_app() -> FastAPI:
 
 
 if __name__ == "__main__":
-    uvicorn.run(create_app())
+    uvicorn.run(create_app(), host=AppSettings().host)
